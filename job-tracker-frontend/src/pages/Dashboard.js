@@ -8,17 +8,13 @@ function Dashboard() {
     const [status, setStatus] = useState('Applied');
     const [notes, setNotes] = useState('');
 
-    useEffect(() => {
-        fetchJobs();
-    }, []);
+    useEffect(() => { fetchJobs(); }, []);
 
     const fetchJobs = async () => {
         try {
             const res = await API.get('/api/jobs');
             setJobs(res.data);
-        } catch (err) {
-            console.log(err);
-        }
+        } catch (err) { console.log(err); }
     };
 
     const addJob = async () => {
@@ -29,9 +25,7 @@ function Dashboard() {
             });
             fetchJobs();
             setCompanyName(''); setRole(''); setNotes('');
-        } catch (err) {
-            console.log(err);
-        }
+        } catch (err) { console.log(err); }
     };
 
     const deleteJob = async (id) => {
@@ -44,46 +38,78 @@ function Dashboard() {
         window.location.href = '/';
     };
 
+    const getStatusBadge = (status) => {
+        const colors = {
+            'Applied': 'primary', 'Interview': 'warning',
+            'Offered': 'success', 'Rejected': 'danger'
+        };
+        return `badge bg-${colors[status] || 'secondary'}`;
+    };
+
     return (
-        <div style={{ padding: '30px' }}>
-            <h2>Job Tracker Dashboard</h2>
-            <button onClick={logout}>Logout</button>
+        <div className="container mt-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2>Job Tracker Dashboard</h2>
+                <button className="btn btn-outline-danger" onClick={logout}>Logout</button>
+            </div>
 
-            <h3>Add New Job</h3>
-            <input placeholder="Company" value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)} />
-            <input placeholder="Role" value={role}
-                onChange={(e) => setRole(e.target.value)} />
-            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                <option>Applied</option>
-                <option>Interview</option>
-                <option>Offered</option>
-                <option>Rejected</option>
-            </select>
-            <input placeholder="Notes" value={notes}
-                onChange={(e) => setNotes(e.target.value)} />
-            <button onClick={addJob}>Add Job</button>
+            <div className="card shadow p-4 mb-4">
+                <h5 className="mb-3">Add New Job</h5>
+                <div className="row g-2">
+                    <div className="col-md-3">
+                        <input className="form-control" placeholder="Company"
+                            value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
+                    </div>
+                    <div className="col-md-3">
+                        <input className="form-control" placeholder="Role"
+                            value={role} onChange={(e) => setRole(e.target.value)} />
+                    </div>
+                    <div className="col-md-2">
+                        <select className="form-select" value={status}
+                            onChange={(e) => setStatus(e.target.value)}>
+                            <option>Applied</option>
+                            <option>Interview</option>
+                            <option>Offered</option>
+                            <option>Rejected</option>
+                        </select>
+                    </div>
+                    <div className="col-md-3">
+                        <input className="form-control" placeholder="Notes"
+                            value={notes} onChange={(e) => setNotes(e.target.value)} />
+                    </div>
+                    <div className="col-md-1">
+                        <button className="btn btn-primary w-100" onClick={addJob}>Add</button>
+                    </div>
+                </div>
+            </div>
 
-            <h3>My Applications</h3>
-            <table border="1" cellPadding="10">
-                <thead>
-                    <tr>
-                        <th>Company</th><th>Role</th>
-                        <th>Status</th><th>Notes</th><th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {jobs.map(job => (
-                        <tr key={job.id}>
-                            <td>{job.companyName}</td>
-                            <td>{job.role}</td>
-                            <td>{job.status}</td>
-                            <td>{job.notes}</td>
-                            <td><button onClick={() => deleteJob(job.id)}>Delete</button></td>
+            <div className="card shadow">
+                <div className="card-header"><h5 className="mb-0">My Applications</h5></div>
+                <table className="table table-hover mb-0">
+                    <thead className="table-dark">
+                        <tr>
+                            <th>Company</th><th>Role</th>
+                            <th>Status</th><th>Notes</th>
+                            <th>Applied Date</th><th>Action</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {jobs.map(job => (
+                            <tr key={job.id}>
+                                <td>{job.companyName}</td>
+                                <td>{job.role}</td>
+                                <td><span className={getStatusBadge(job.status)}>{job.status}</span></td>
+                                <td>{job.notes}</td>
+                                <td>{job.appliedDate}</td>
+                                <td>
+                                    <button className="btn btn-danger btn-sm"
+                                        onClick={() => deleteJob(job.id)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

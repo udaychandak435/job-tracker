@@ -18,17 +18,29 @@ function Register() {
     };
 
     return (
-        <div style={{ padding: '50px', maxWidth: '400px', margin: 'auto' }}>
-            <h2>Register</h2>
-            <input placeholder="Username" value={username}
-                onChange={(e) => setUsername(e.target.value)} /><br /><br />
-            <input placeholder="Email" value={email}
-                onChange={(e) => setEmail(e.target.value)} /><br /><br />
-            <input placeholder="Password" type="password" value={password}
-                onChange={(e) => setPassword(e.target.value)} /><br /><br />
-            <button onClick={handleRegister}>Register</button>
-            <p>{message}</p>
-            <a href="/">Login here</a>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-4">
+                    <div className="card shadow p-4">
+                        <h2 className="text-center mb-4">Job Tracker</h2>
+                        <h5 className="text-center text-muted mb-4">Register</h5>
+                        <input className="form-control mb-3" placeholder="Username"
+                            value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <input className="form-control mb-3" placeholder="Email"
+                            value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input className="form-control mb-3" placeholder="Password"
+                            type="password" value={password}
+                            onChange={(e) => setPassword(e.target.value)} />
+                        <button className="btn btn-success w-100" onClick={handleRegister}>
+                            Register
+                        </button>
+                        {message && <p className="text-success mt-2">{message}</p>}
+                        <p className="text-center mt-3">
+                            <a href="/">Login here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
