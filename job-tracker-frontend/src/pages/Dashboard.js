@@ -7,6 +7,7 @@ function Dashboard() {
     const [role, setRole] = useState('');
     const [status, setStatus] = useState('Applied');
     const [notes, setNotes] = useState('');
+    const [location, setLocation] = useState('');
 
     useEffect(() => { fetchJobs(); }, []);
 
@@ -20,11 +21,11 @@ function Dashboard() {
     const addJob = async () => {
         try {
             await API.post('/api/jobs', {
-                companyName, role, status, notes,
+                companyName, role, status, notes, location,
                 appliedDate: new Date().toISOString().split('T')[0]
             });
             fetchJobs();
-            setCompanyName(''); setRole(''); setNotes('');
+            setCompanyName(''); setRole(''); setNotes(''); setLocation('');
         } catch (err) { console.log(err); }
     };
 
@@ -77,6 +78,10 @@ function Dashboard() {
                         <input className="form-control" placeholder="Notes"
                             value={notes} onChange={(e) => setNotes(e.target.value)} />
                     </div>
+                    <div className="col-md-2">
+                        <input className="form-control" placeholder="Location"
+                            value={location} onChange={(e) => setLocation(e.target.value)} />
+                    </div>
                     <div className="col-md-1">
                         <button className="btn btn-primary w-100" onClick={addJob}>Add</button>
                     </div>
@@ -90,7 +95,7 @@ function Dashboard() {
                         <tr>
                             <th>Company</th><th>Role</th>
                             <th>Status</th><th>Notes</th>
-                            <th>Applied Date</th><th>Action</th>
+                            <th>Location</th><th>Applied Date</th><th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,10 +105,13 @@ function Dashboard() {
                                 <td>{job.role}</td>
                                 <td><span className={getStatusBadge(job.status)}>{job.status}</span></td>
                                 <td>{job.notes}</td>
+                                <td>{job.location}</td>
                                 <td>{job.appliedDate}</td>
                                 <td>
                                     <button className="btn btn-danger btn-sm"
-                                        onClick={() => deleteJob(job.id)}>Delete</button>
+                                        onClick={() => deleteJob(job.id)}>
+                                        <i className="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         ))}

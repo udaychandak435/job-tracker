@@ -18,6 +18,7 @@ public class JobApplication {
     private String status; // Applied, Interview, Offered, Rejected
     private LocalDate appliedDate;
     private String notes;
+    private String location;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
